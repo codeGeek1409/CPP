@@ -1,12 +1,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define RECORD "entries"
-#define MAX_ENTRY 10
+#define MAX_ENTRY 100
 
 /* *
 	* @about: an accountant journal entry program
 	* features like search, edit, delete of entry
 	* @todo: implement 2. Modify
+	* @error: need to replace scanf with fgets as it
+	* only works for one string: solved
 	*/
 
 FILE *entryfile; // main record file
@@ -24,6 +26,8 @@ void entryReader(FILE*); // reads max entrie(s) from file
 void entryReaderX(struct entry); // reads entry to output
 void entryReaderRaw(struct entry); // one line entry output
 struct entry makeEntry(void); // create an entry and add to file, returns data written
+char* newlineRem(char*);
+int deleteEntries(char*);
 
 int main(void){
 	prompt();
@@ -50,6 +54,7 @@ void prompt(void){
 		case '3':
 			break;
 		case '4':
+		deleteEntries(RECORD);
 			break;
 		case '5':
 			entryReader(entryfile);
@@ -61,10 +66,14 @@ void prompt(void){
 void entryReader(FILE *rdfrom){
 	struct entry ent[MAX_ENTRY];
 	rdfrom=fopen(RECORD, "rb");
+	if(rdfrom==NULL){
+		puts("Error: File not found.\n");
+		exit(1);
+	}
 	int i=0;
 	while(i<MAX_ENTRY){
 		if(fread(&ent[i],sizeof(struct entry), 1, rdfrom)!=1) {
-			printf("\n%d entries read.\n", i);
+			printf("\n%d entrie(s) read.\n", i);
 			return;
 		}
 		printf("SN: %d\n", ent[i].SL);
@@ -94,10 +103,25 @@ struct entry makeEntry(void){
 	struct entry ent;
 	printf("SN: "); scanf("%d", &ent.SL);
 	printf("Date[dd/mm/yyyy]: "); scanf("%d%*c%d%*c%d", &ent.d.day, &ent.d.month, &ent.d.year);
-	printf("Debit: "); scanf("%s", &ent.DEBIT);
-	printf("Credit: "); scanf("%s", &ent.CREDIT);
-	printf("Amount: "); scanf("%f", &ent.AMOUNT);
-	printf("Narration: "); scanf("%s", &ent.NARRATION);
+	// need validator
+ printf("Debit: "); 
+ getchar(); // for scand
+
+ fgets(ent.DEBIT, 80, stdin);
+ newlineRem(ent.DEBIT); // fgets take /n in string
+ // getchar not needed as nothing left
+ 
+	printf("Credit: "); 
+	fgets(ent.CREDIT, 80, stdin);
+	newlineRem(ent.CREDIT);
+	
+	printf("Amount: "); 
+	scanf("%f", &ent.AMOUNT); // leaves newline hanging
+
+	printf("Narration: "); 
+	getchar();
+	fgets(ent.NARRATION,80, stdin);
+newlineRem(ent.NARRATION);
 
 	entryfile=fopen(RECORD, "ab");
 	if(entryfile==NULL){
@@ -111,4 +135,14 @@ struct entry makeEntry(void){
 	fclose(entryfile);
 	entryReaderRaw(ent);
 	return ent;
+}
+char* newlineRem(char* s){
+	int i=0;
+	while(s[i++]!='\0');
+	i-=2;
+	s[i]='\0';
+}
+int deleteEntries(char* f){
+	if(remove(f)) return 0;
+	else return 1;
 }
