@@ -7,11 +7,6 @@
 	* @about: an accountant journal entry program
 	* features like search, edit, delete of entry
 	* @todo: implement 2. Modify
-	* @error: need to replace scanf with fgets as it
-	* only works for one string: solved
-	* three hours work lost due to problem with github 
-	* synchronization
-	* gittest: 2
 	*/
 
 FILE *entryfile; // main record file
@@ -31,7 +26,7 @@ void entryReaderRaw(struct entry); // one line entry output
 struct entry makeEntry(void); // create an entry and add to file, returns data written
 char* newlineRem(char*);
 int deleteEntries(char*);
-
+//
 int main(void){
 	prompt();
 	return 0;
@@ -48,6 +43,7 @@ void prompt(void){
 	\n5. View all entries\n");
 	printf("Choose: ");
 	scanf("%c", &choice);
+	getchar();
 	switch(choice){
 		case '1':
 			makeEntry();
