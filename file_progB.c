@@ -11,6 +11,7 @@
 	* only works for one string: solved
 	* three hours work lost due to problem with github 
 	* synchronization
+	* gittest: 2
 	*/
 
 FILE *entryfile; // main record file
