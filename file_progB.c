@@ -9,6 +9,8 @@
 	* @todo: implement 2. Modify
 	* @error: need to replace scanf with fgets as it
 	* only works for one string: solved
+	* three hours work lost due to problem with github 
+	* synchronization
 	*/
 
 FILE *entryfile; // main record file
