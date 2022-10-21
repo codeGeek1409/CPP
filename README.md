@@ -1,7 +1,6 @@
 # CommonCPrograms
-Short C Programs
+Short C++ Programs
 ## Finished
-1. Tic-Tac-Toe
-2. EMI Calculator
+1. Stack
 
 *more will be added*
