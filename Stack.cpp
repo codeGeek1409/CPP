@@ -1,15 +1,19 @@
 #include<iostream>
 #include<new>
 using namespace std;
+/*
+ * @brief: generic stack class demo
+ * @author: Lalatendu
+ */
 template<class Type>
-class Stack {
+class Stack { // uses template here
 	int index;
 	Type* tos;
 public:
 	int size;
-	Stack(int sz) {
+	Stack(int sz = 1) { // default to 1
 		index = 0;
-		if (sz < 1)
+		if (sz < 1) // if negative is entered reset to 1
 			size = 1;
 		else
 			size = sz;
@@ -18,7 +22,7 @@ public:
 		} catch (bad_alloc xa) {
 			cout << "error allocation. \n";
 			return;
-		}
+		} // array initialized
 	}
 	int get_index() {
 		return this->index;
@@ -29,54 +33,46 @@ public:
 			cout << tos[i] << ' ';
 		}
 		cout << '\n';
-	}
+	} // prints stack linearly
 	void push(Type i) {
 		if (index < 0)
 			index++;
-		if (index > size - 1) {
-			cout << "Stack full.\n";
+		if (index > size - 1) { // size is not 0 based but index is
+			cout << "PUSH: Stack full.\n";
 			return;
-		} else {
-			tos[index++] = i;
-			cout << "D: stack in: " << i << '\n';
-		}
+		} else tos[index++] = i;
 	}
 	int pop(bool isLIFO) {
 		if (index < 0) {
-			cout << "Stack out of bounds ";
+			cout << "POP: Stack out of bounds " << '\n';
 			return -1;
 		}
-		if (index == 0) { index--; return tos[0]; }
-		//if (index > size - 1)
-		//	index--;
-		if (isLIFO == true)
+		if (index == 0) { index--; return tos[0]; } // is stack has run out...
+		if (isLIFO == true) // last in first out
 			return tos[--index];
-		cout << '\n' << "pop2: index: " << this->get_index() << '\n';
-		int temp = tos[0];
+		int temp = tos[0]; // to use later for return
 		for (int i = 0; i < index; i++)
-			tos[i] = tos[i + 1];
+			tos[i] = tos[i + 1]; // reassign
 		index--;
 		return temp;
 	}
 	~Stack() {
-		delete[]tos;
+		delete[]tos; // release memory
 	}
 };
 
 int main(int argc, char* argv[]) {
-	Stack <bool> s = 10;
+	Stack <int> s = 10;
 	cout << "Stack size: " << s.size << "\n";
-	for (int i = 0; i < 15; i++)
-		s.push(i + 0.7);
-	for (int j = 0; j < 15; j++)
-		cout << "D out: " << s.pop(false) << '\n';
-	for (int i = 0; i < 15; i++)
-		s.push(i + 0.8);
+	for (int i = 0; i < 15; i++) s.push(i);
+	for (int j = 0; j < 15; j++) cout << s.pop(false);
+	for (int i = 0; i < 15; i++) s.push(i);
 	s.print_stk();
-	cout << s.pop(true) << s.pop(false);
+	cout << s.pop(true); cout << s.pop(false);
 	s.print_stk();
-	s.push(23.5);
+	s.push(23);
 	s.print_stk();
 	cout << s.pop(true);
+	s.print_stk();
 	return 0;
 }
