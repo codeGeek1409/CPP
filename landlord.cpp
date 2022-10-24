@@ -22,7 +22,9 @@ class Landlord{
 	double elect_bill;
 	int increment_rate;
 	public:
-	Landlord(){
+	friend class Tenant;
+	Landlord(const char* s):name(s){
+		cout << name << " is in business.\n";
 	};
 };
 class Tenant{
@@ -34,13 +36,16 @@ class Tenant{
 	double rent_payable;
 	double arrears;
 	public:
-	Tenant(){};
+	Tenant(const char* s):name(s){
+	};
 	void pay(); // scope for overloading
 };
 int main(int argc, char*argv[]){
 	int i=0;
 	while(i++<5) cout << '*';
 	cout << "BOOKS OF LALA SETH"; i=0;
-	while(i++<5) cout << '*';
+	while(i++<5) cout << '*'; cout << endl;
+	new Landlord("Lala");
+	new Tenant("dobu");
 	return 0;
 }
